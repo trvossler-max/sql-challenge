@@ -23,10 +23,49 @@ ORDER BY dept_no ASC;
 
 --List the department of each employee with the following information: employee number, last name, 
 --first name, and department name.
-SELECT dm.dept_no, d.dept_name, dm.emp_no, e.last_name, e.first_name
-FROM dept_manager AS dm
+--Employees that are assigned to multiple departments will be listed multiple times with this query
+SELECT de.emp_no, e.last_name, e.first_name, d.dept_name
+FROM dept_emp AS de
   INNER JOIN employees AS e 
-  ON (e.emp_no=dm.emp_no)
+  ON (e.emp_no=de.emp_no)
     JOIN departments AS d
-	ON (d.dept_no = dm.dept_no)
-ORDER BY dept_no ASC;
+	ON (d.dept_no = de.dept_no)
+ORDER BY emp_no ASC;
+
+--List first name, last name, and sex for employees whose first name is "Hercules" and 
+--last names begin with "B."
+
+SELECT first_name, last_name, sex 
+FROM employees
+WHERE first_name = 'Hercules' AND last_name LIKE 'B%';
+
+--List all employees in the Sales department, including their employee number, last name, first name,
+--and department name.
+SELECT de.emp_no, e.last_name, e.first_name, d.dept_name
+FROM dept_emp AS de
+  INNER JOIN employees AS e 
+  ON (e.emp_no=de.emp_no)
+    JOIN departments AS d
+	ON (d.dept_no = de.dept_no)
+        WHERE dept_name  = 'Sales'
+ORDER BY emp_no ASC;
+
+--List all employees in the Sales and Development departments, including their employee number, last name,
+--first name, and department name.
+SELECT de.emp_no, e.last_name, e.first_name, d.dept_name
+FROM dept_emp AS de
+  INNER JOIN employees AS e 
+  ON (e.emp_no=de.emp_no)
+    JOIN departments AS d
+	ON (d.dept_no = de.dept_no)
+        WHERE 
+		  dept_name  = 'Sales' 
+		  OR dept_name = 'Development'
+ORDER BY emp_no ASC;
+
+--In descending order, list the frequency count of employee last names, i.e., 
+--how many employees share each last name.
+SELECT last_name, COUNT(last_name) AS l_name
+FROM employees
+GROUP BY last_name
+ORDER BY l_name DESC;
